@@ -134,12 +134,12 @@ export const mutations = {
            state.subCategories = data;
          },
          TOGGLE_GENDER(state, gender) {
-           state.search.gender = gender;
+           state.parameter.gender = gender;
          },
          TOGGLE_CATEGORY(state, category) {
-           state.search.category = category;
+           state.parameter.category = category;
          },
          TOGGLE_SUBCATEGORY(state, subCategory) {
-           state.search.subCategory = subCategory;
+           state.parameter.subCategory = subCategory;
          }
        };
