@@ -1,22 +1,16 @@
-<template>
-  <div v-if="isDetail">
+<template lang="pug">
+  v-card(v-if="isDetail")
       <!-- 画像 -->
-      <img
-        :src="item.imageUrl"
-        :alt="item.brand"
-        class="mb-5"
-      >
+      v-img(:src="item.imageUrl" :alt="item.brand")
       <!-- ブランド名・タイトル -->
-      <div class="single_container flex">
-        <div class="single_info" :data-item_id="item.itemId" :data-brand="item.brand">
-            <h1>{{ item.brand }} {{ item.title }}</h1>
-        </div>
-      </div>
+      v-card-title(:data-item_id="item.itemId" :data-brand="item.brand")
+        h1
+          | {{ item.brand }} {{ item.title }}
       <!-- 金額・ショップリンク -->
       <div class="single_container flex">
           <span>{{ item.lowestPrice.price }} -</span>
           <a v-for="detailUrl in item.detailUrls" :href="detailUrl" rel="nofollow" target="_blank" class="to_shop_btn">
-            ショップへ行く
+            | ショップへ行く
           </a>
       </div>
       <!-- コンテンツ -->
@@ -36,14 +30,10 @@
               <!-- unisize v3 start -->
           </div>
       </div>
-  </div>
-  <v-col v-else>
-      <v-card :click="`/items/item/${item.itemId}`">
-          <v-img :src="item.imageUrl.pc" :srcset="`${item.imageUrl.sp} 414w, ${item.imageUrl.retina} 1080w,${item.imageUrl.pc} 1920w`" :alt="`${item.brand} ${item.title}`">
-            <v-card-title v-text="item.brand"></v-card-title>
-          </v-img>
-      </v-card>
-  </v-col>
+  v-col(v-else)
+      v-card(:href="`/items/item/${item.itemId}`")
+          v-img(:src="item.imageUrl.pc" :srcset="`${item.imageUrl.sp} 414w, ${item.imageUrl.retina} 1080w,${item.imageUrl.pc} 1920w`" :alt="`${item.brand} ${item.title}`")
+            v-card-title(v-text="item.brand")
 </template>
 <script>
 export default {

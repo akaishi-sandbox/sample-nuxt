@@ -1,9 +1,7 @@
-<template>
-  <v-tabs fixed-tabs>
-    <v-tab v-for="gender in genders" class="gender_switch" :data-gender="gender.key" v-on:click="gender_switch(gender.key)">
-        {{ gender.name }}
-    </v-tab>
-  </v-tabs>
+<template lang="pug">
+  v-tabs(fixed-tabs)
+    v-tab(v-for="gender in genders" :data-gender="gender.key" v-on:click="gender_switch(gender.key)")
+      | {{ gender.name }}
 </template>
 
 <script>

@@ -1,11 +1,9 @@
-<template>
-  <div>
-    <div class="recommend_title">
-        <h2>おすすめアイテム</h2>
-    </div>
-    <div class="recommend_content">
-    </div>
-  </div>
+<template lang="pug">
+  div
+    div
+      h2
+        | おすすめアイテム
+    div
 </template>
 <script>
 import axios from 'axios';
