@@ -114,22 +114,22 @@ export default {
         {
           icon: 'mdi-chart-bubble',
           title: 'お問い合わせ',
-          to: 'https://makip.co.jp/#contact_us_area'
+          href: 'https://makip.co.jp/#contact_us_area'
         },
         {
           icon: 'mdi-chart-bubble',
           title: '会社概要',
-          to: 'https://makip.co.jp/#company'
+          href: 'https://makip.co.jp/#company'
         },
         {
           icon: 'mdi-chart-bubble',
           title: '利用規約',
-          to: 'https://makip.co.jp/unisize-terms.html'
+          href: 'https://makip.co.jp/unisize-terms.html'
         },
         {
           icon: 'mdi-chart-bubble',
           title: 'プライバシーポリシー',
-          to: 'https://makip.co.jp/privacy-policy.html'
+          href: 'https://makip.co.jp/privacy-policy.html'
         }
       ],
       miniVariant: false,
