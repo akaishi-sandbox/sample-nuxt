@@ -2,11 +2,11 @@
   div
     nav
       v-tabs(show-arrows)
-        v-tab(v-for="category in categories" v-on:click="category_switch(category)")
+        v-tab(v-for="category in categories" v-bind:key="category.id" v-on:click="category_switch(category)")
           | {{ category }}
     nav
       v-tabs(fixed-tabs)
-        v-tab(v-for="subCategory in subCategories" v-on:click="sub_category_switch(subCategory)")
+        v-tab(v-for="subCategory in subCategories" v-bind:key="subCategory.id" v-on:click="sub_category_switch(subCategory)")
           | {{ subCategory }}
 </template>
 

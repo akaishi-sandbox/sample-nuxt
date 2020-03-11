@@ -13,7 +13,7 @@
       <categoryTabs />
       <v-container class="grey lighten-5">
         <v-row no-gutters>
-          <item v-for="item in items" :item="item" :isDetail="false" />
+          <item v-for="item in items" v-bind:key="item.id" :item="item" :isDetail="false" />
         </v-row>
       </v-container>
     </v-flex>

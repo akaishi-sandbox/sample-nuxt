@@ -20,7 +20,7 @@
             | 価格の高い順
     v-navigation-drawer(v-model="rightDrawer" :right="right" temporary fixed)
       v-list
-        v-list-item(v-for="(item, i) in items")
+        v-list-item(v-for="(item, i) in items" v-bind:key="item.id")
           v-list-item-action
             v-icon
               | {{ item.icon }}

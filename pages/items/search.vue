@@ -21,7 +21,7 @@
           @keyup.enter="search"
         />
         <sortBox />
-        <item v-for="item in items" :item="item" :isDetail="false" />
+        <item v-for="item in items" :item="item" v-bind:key="item.id" :isDetail="false" />
       </ul>
     </v-flex>
   </v-layout>
