@@ -37,12 +37,13 @@
           </div>
       </div>
   </div>
-  <li class="itemfeed_item" v-else>
-      <a :href="`/items/item/${item.itemId}`">
-          <img :src="item.imageUrl.pc" :srcset="`${item.imageUrl.sp} 414w, ${item.imageUrl.retina} 1080w,${item.imageUrl.pc} 1920w`" :alt="`${item.brand} ${item.title}`">
-          <span>{{ item.brand }}</span>
-      </a>
-  </li>
+  <v-col v-else>
+      <v-card :click="`/items/item/${item.itemId}`">
+          <v-img :src="item.imageUrl.pc" :srcset="`${item.imageUrl.sp} 414w, ${item.imageUrl.retina} 1080w,${item.imageUrl.pc} 1920w`" :alt="`${item.brand} ${item.title}`">
+            <v-card-title v-text="item.brand"></v-card-title>
+          </v-img>
+      </v-card>
+  </v-col>
 </template>
 <script>
 export default {

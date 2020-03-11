@@ -9,23 +9,26 @@
       sm8
       md6
     >
-      <div class="text-center">
-        <tabs />
-      </div>
-      <ul class="itemfeed_list flex">
-        <item v-for="item in items" :item="item"  :isDetail="false" />
-      </ul>
+      <genderTabs />
+      <categoryTabs />
+      <v-container class="grey lighten-5">
+        <v-row no-gutters>
+          <item v-for="item in items" :item="item" :isDetail="false" />
+        </v-row>
+      </v-container>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 import item from '@/components/item.vue';
-import tabs from '@/components/tabs.vue';
+import genderTabs from '@/components/genderTabs.vue';
+import categoryTabs from '@/components/categoryTabs.vue';
 
 export default {
   components: {
-    tabs,
+    genderTabs,
+    categoryTabs,
     item
   },
   computed: {

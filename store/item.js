@@ -1,25 +1,26 @@
 import axios from "axios";
 
 export const state = () => ({
-         parameter: {
-           gender: "WOMEN",
-           category: "",
-           keywords: ""
-         },
-         genders: [
-           {
-             key: "WOMEN",
-             name: "レディース"
-           },
-           {
-             key: "MEN",
-             name: "メンズ"
-           }
-         ],
-         categories: [],
-         subCategories: [],
-         list: []
-       });
+  parameter: {
+    gender: "WOMEN",
+    category: "",
+    keywords: ""
+  },
+  genders: [
+    {
+      key: "WOMEN",
+      name: "レディース"
+    },
+    {
+      key: "MEN",
+      name: "メンズ"
+    }
+  ],
+  total: 0,
+  categories: [],
+  subCategories: [],
+  list: []
+});
 
 export const actions = {
          async category({ commit }) {
@@ -64,51 +65,51 @@ export const actions = {
            commit("SET_SUBCATEGORY", categories);
          },
   async search({ commit }, payload) {
-           commit("SET_PARAMETER", payload);
-           const { data } = await axios.get(
-             `https://5qh6aaw9u4.execute-api.ap-northeast-1.amazonaws.com/Prod/search-items`,
-             {
-               params: this.state.item.parameter
-             }
-           );
-           const items = data.items.map(item => {
-             const lowestPrice = {
-               shop: "",
-               price: 99999999
-             };
-             if (lowestPrice.price > item._source.lowest_price) {
-               lowestPrice.shop = item._source.shop;
-               lowestPrice.price = item._source.lowest_price;
-             }
-             const imageUrls = [];
-             if (item._source.image_urls == undefined) {
-               for (let i = 1; i <= item._source.image_num; i++) {
-                 imageUrls.push(
-                   `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/main${i}.jpg`
-                 );
-               }
-             }
-             return {
-               clientId: "todo",
-               itemId: item._source.item_id,
-               title: item._source.title,
-               brand: item._source.brand,
-               gender: item._source.gender,
-               category: item._source.category,
-               imageUrl: {
-                 retina: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/retina/thumbnail.jpg`,
-                 pc: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/pc/thumbnail.jpg`,
-                 sp: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/sp/thumbnail.jpg`
-               },
-               imageUrls: imageUrls,
-               detailUrls: [item._source.detail_url],
-               contents: [item._source.description],
-               lowestPrice: lowestPrice
-             };
-           });
-           commit("SET_RESULT", items);
-         }
-       };
+    commit("SET_PARAMETER", payload);
+    const { data } = await axios.get(
+      `https://5qh6aaw9u4.execute-api.ap-northeast-1.amazonaws.com/Prod/search-items`,
+      {
+        params: this.state.item.parameter
+      }
+    );
+    commit("SET_TOTAL", data.total);
+    commit("SET_RESULT", data.items.map(item => {
+      const lowestPrice = {
+        shop: "",
+        price: 99999999
+      };
+      if (lowestPrice.price > item._source.lowest_price) {
+        lowestPrice.shop = item._source.shop;
+        lowestPrice.price = item._source.lowest_price;
+      }
+      const imageUrls = [];
+      if (item._source.image_urls == undefined) {
+        for (let i = 1; i <= item._source.image_num; i++) {
+          imageUrls.push(
+            `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/main${i}.jpg`
+          );
+        }
+      }
+      return {
+        clientId: "todo",
+        itemId: item._source.item_id,
+        title: item._source.title,
+        brand: item._source.brand,
+        gender: item._source.gender,
+        category: item._source.category,
+        imageUrl: {
+          retina: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/retina/thumbnail.jpg`,
+          pc: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/pc/thumbnail.jpg`,
+          sp: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/sp/thumbnail.jpg`
+        },
+        imageUrls: imageUrls,
+        detailUrls: [item._source.detail_url],
+        contents: [item._source.description],
+        lowestPrice: lowestPrice
+      };
+    }));
+  }
+};
 
 export const mutations = {
          SET_PARAMETER(state, data) {
@@ -122,8 +123,14 @@ export const mutations = {
              if (data.subCategory != undefined && data.subCategory != "ALL") {
                state.parameter.keywords = data.subCategory;
              }
+             if (data.keyword != undefined && data.keyword) {
+               state.parameter.keywords = data.keyword;
+             }
            }
-         },
+  },
+  SET_TOTAL(state, data) {
+    state.total = data;
+  },
          SET_RESULT(state, data) {
            state.list = data;
          },
