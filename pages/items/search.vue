@@ -20,6 +20,12 @@ export default {
       keyword: ""
     };
   },
+  created() {
+    this.$store.dispatch("item/init", {
+      gender: true,
+      keyword: true
+    });
+  },
   computed: {
     items() {
       return this.$store.state.item.list;

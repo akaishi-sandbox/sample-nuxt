@@ -18,6 +18,10 @@ export default {
     }
   },
   async created() {
+    this.$store.dispatch("item/init", {
+      gender: true,
+      category: true
+    });
     await this.$store.dispatch("item/category");
   },
   async fetch ({ store, params }) {

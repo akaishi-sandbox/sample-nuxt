@@ -1,6 +1,11 @@
 import axios from "axios";
 
 export const state = () => ({
+  tabs: {
+    gender: false,
+    category: false,
+    keyword: false
+  },
   parameter: {
     gender: "WOMEN",
     category: "",
@@ -16,6 +21,7 @@ export const state = () => ({
       name: "メンズ"
     }
   ],
+  appBarHeight: 0,
   total: 0,
   categories: [],
   subCategories: [],
@@ -23,47 +29,46 @@ export const state = () => ({
 });
 
 export const actions = {
-         async category({ commit }) {
-           const { data } = await axios.get(
-             `https://5qh6aaw9u4.execute-api.ap-northeast-1.amazonaws.com/Prod/classification-info`,
-             {
-               params: {
-                 index: "categories",
-                 gender: this.state.item.parameter.gender
-               }
-             }
-           );
+  init({ commit }, payload) {
+    commit("SET_TABS", payload);
+  },
+  async category({ commit }) {
+    const { data } = await axios.get(
+      `https://5qh6aaw9u4.execute-api.ap-northeast-1.amazonaws.com/Prod/classification-info`,
+      {
+        params: {
+          index: "categories",
+          gender: this.state.item.parameter.gender
+        }
+      }
+    );
 
-           let categories = ["ALL"];
-           categories = categories.concat(
-             data.hits.map(hit => hit._source.title)
-           );
-           commit("SET_CATEGORY", categories);
-         },
-        async subCategories({ commit }, payload) {
-           commit("TOGGLE_CATEGORY", payload );
-           const { data } = await axios.get(
-             `https://5qh6aaw9u4.execute-api.ap-northeast-1.amazonaws.com/Prod/classification-info`,
-             {
-               params: {
-                 index: "categories",
-                 gender: this.state.item.parameter.gender,
-                 title: this.state.item.parameter.category
-               }
-             }
-           );
+    let categories = ["ALL"];
+    categories = categories.concat(data.hits.map(hit => hit._source.title));
+    commit("SET_CATEGORY", categories);
+  },
+  async subCategories({ commit }, payload) {
+    commit("TOGGLE_CATEGORY", payload);
+    const { data } = await axios.get(
+      `https://5qh6aaw9u4.execute-api.ap-northeast-1.amazonaws.com/Prod/classification-info`,
+      {
+        params: {
+          index: "categories",
+          gender: this.state.item.parameter.gender,
+          title: this.state.item.parameter.category
+        }
+      }
+    );
 
-           let categories = [];
-           if (data.total > 0) {
-             categories = ["ALL"];
-             categories = categories.concat(
-               data.hits[0]._source.sub_categories.map(
-                 category => category.title
-               )
-             );
-           }
-           commit("SET_SUBCATEGORY", categories);
-         },
+    let categories = [];
+    if (data.total > 0) {
+      categories = ["ALL"];
+      categories = categories.concat(
+        data.hits[0]._source.sub_categories.map(category => category.title)
+      );
+    }
+    commit("SET_SUBCATEGORY", categories);
+  },
   async search({ commit }, payload) {
     commit("SET_PARAMETER", payload);
     const { data } = await axios.get(
@@ -73,80 +78,127 @@ export const actions = {
       }
     );
     commit("SET_TOTAL", data.total);
-    commit("SET_RESULT", data.items.map(item => {
-      const lowestPrice = {
-        shop: "",
-        price: 99999999
-      };
-      if (lowestPrice.price > item._source.lowest_price) {
-        lowestPrice.shop = item._source.shop;
-        lowestPrice.price = item._source.lowest_price;
-      }
-      const imageUrls = [];
-      if (item._source.image_urls == undefined) {
-        for (let i = 1; i <= item._source.image_num; i++) {
-          imageUrls.push(
-            `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/main${i}.jpg`
-          );
+    commit(
+      "SET_RESULT",
+      data.items.map(item => {
+        const lowestPrice = {
+          shop: "",
+          price: 99999999
+        };
+        if (lowestPrice.price > item._source.lowest_price) {
+          lowestPrice.shop = item._source.shop;
+          lowestPrice.price = item._source.lowest_price;
         }
-      }
-      return {
-        clientId: "todo",
-        itemId: item._source.item_id,
-        title: item._source.title,
-        brand: item._source.brand,
-        gender: item._source.gender,
-        category: item._source.category,
-        imageUrl: {
-          retina: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/retina/thumbnail.jpg`,
-          pc: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/pc/thumbnail.jpg`,
-          sp: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/sp/thumbnail.jpg`
-        },
-        imageUrls: imageUrls,
-        detailUrls: [item._source.detail_url],
-        contents: [item._source.description],
-        lowestPrice: lowestPrice
-      };
-    }));
+        const imageUrls = [];
+        if (item._source.image_urls == undefined) {
+          for (let i = 1; i <= item._source.image_num; i++) {
+            imageUrls.push(
+              `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/main${i}.jpg`
+            );
+          }
+        }
+        return {
+          clientId: "todo",
+          itemId: item._source.item_id,
+          title: item._source.title,
+          brand: item._source.brand,
+          gender: item._source.gender,
+          category: item._source.category,
+          imageUrl: {
+            retina: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/retina/thumbnail.jpg`,
+            pc: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/pc/thumbnail.jpg`,
+            sp: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/sp/thumbnail.jpg`
+          },
+          imageUrls: imageUrls,
+          detailUrls: [item._source.detail_url],
+          contents: [item._source.description],
+          lowestPrice: lowestPrice
+        };
+      })
+    );
   }
 };
 
 export const mutations = {
-         SET_PARAMETER(state, data) {
-           if (data != undefined) {
-             if (data.gender != undefined) {
-               state.parameter.gender = data.gender;
-             }
-             if (data.category != undefined && data.category != "ALL") {
-               state.parameter.category = data.category;
-             }
-             if (data.subCategory != undefined && data.subCategory != "ALL") {
-               state.parameter.keywords = data.subCategory;
-             }
-             if (data.keyword != undefined && data.keyword) {
-               state.parameter.keywords = data.keyword;
-             }
-           }
+  SET_TABS(state, data) {
+    state.tabs = {
+      gender: false,
+      category: false,
+      keyword: false
+    };
+    if (data != undefined) {
+      if (data.gender != undefined) {
+        state.tabs.gender = data.gender;
+      }
+      if (data.category != undefined) {
+        state.tabs.category = data.category;
+      }
+      if (data.keyword != undefined) {
+        state.tabs.keyword = data.keyword;
+      }
+    }
+    state.appBarHeight = 0;
+    if (state.tabs.gender) {
+      state.appBarHeight += 48;
+    }
+    if (state.tabs.category) {
+      state.appBarHeight += 48;
+    }
+    if (state.tabs.category && state.subCategories.length > 0) {
+      state.appBarHeight += 56;
+    }
+    if (state.tabs.keyword) {
+      state.appBarHeight += 70;
+    }
+  },
+  SET_PARAMETER(state, data) {
+    if (data != undefined) {
+      if (data.gender != undefined) {
+        state.parameter.gender = data.gender;
+      }
+      if (data.category != undefined && data.category != "ALL") {
+        state.parameter.category = data.category;
+      }
+      if (data.subCategory != undefined && data.subCategory != "ALL") {
+        state.parameter.keywords = data.subCategory;
+      }
+      if (data.keyword != undefined && data.keyword) {
+        state.parameter.keywords = data.keyword;
+      }
+    }
   },
   SET_TOTAL(state, data) {
     state.total = data;
   },
-         SET_RESULT(state, data) {
-           state.list = data;
-         },
-         SET_CATEGORY(state, data) {
-           state.categories = data;
-         },
-         SET_SUBCATEGORY(state, data) {
-           state.subCategories = data;
-         },
-         TOGGLE_GENDER(state, gender) {
-           state.parameter.gender = gender;
-         },
-         TOGGLE_CATEGORY(state, category) {
-           state.parameter.category = category;
-         },
-         TOGGLE_SUBCATEGORY(state, subCategory) {
-           state.parameter.subCategory = subCategory;
-         }
-       };
+  SET_RESULT(state, data) {
+    state.list = data;
+  },
+  SET_CATEGORY(state, data) {
+    state.categories = data;
+  },
+  SET_SUBCATEGORY(state, data) {
+    state.subCategories = data;
+    state.appBarHeight = 0;
+    if (state.tabs.gender) {
+      state.appBarHeight += 48;
+    }
+    if (state.tabs.category) {
+      state.appBarHeight += 48;
+    }
+    if (state.tabs.category && state.subCategories.length > 0) {
+      state.appBarHeight += 56;
+    }
+    if (state.tabs.keyword) {
+      state.appBarHeight += 70;
+    }
+  },
+  TOGGLE_GENDER(state, gender) {
+    state.parameter.gender = gender;
+  },
+  TOGGLE_CATEGORY(state, category) {
+    state.parameter.category = category;
+  },
+  TOGGLE_SUBCATEGORY(state, subCategory) {
+    state.parameter.subCategory = subCategory;
+  }
+};
