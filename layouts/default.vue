@@ -23,14 +23,14 @@
           | mdi-magnify
       template(v-slot:extension v-if="tabs.gender || tabs.categories || tabs.subCategories || tabs.keywords")
         v-card(flat width="100%")
-          v-tabs(v-if="tabs.gender && genders.length > 0" grow)
-            v-tab(v-for="gender in genders" v-bind:key="gender.id" :data-gender="gender.key" v-on:click="gender_switch(gender.key)")
+          v-tabs(v-if="tabs.gender && genders.length > 0" grow v-model="gender")
+            v-tab(v-for="gender in genders" v-bind:key="gender.key" :data-gender="gender.key" v-on:click="gender_switch(gender.key)")
               | {{ gender.name }}
-          v-tabs(v-if="tabs.category && categories.length > 0" show-arrows)
-            v-tab(v-for="category in categories" v-bind:key="category.id" v-on:click="category_switch(category)")
+          v-tabs(v-if="tabs.category && categories.length > 0" show-arrows v-model="category")
+            v-tab(v-for="category in categories" v-bind:key="category" v-on:click="category_switch(category)")
               | {{ category }}
           v-btn-toggle(v-if="tabs.category && subCategories.length > 0" tile color="deep-red accent-3" group)
-            v-btn(v-for="subCategory in subCategories" v-bind:key="subCategory.id" :value="subCategory" v-on:click="sub_category_switch(subCategory)")
+            v-btn(v-for="subCategory in subCategories" v-bind:key="subCategory" :value="subCategory" v-on:click="sub_category_switch(subCategory)")
               | {{ subCategory }}
           v-text-field.mt-4(v-if="tabs.keyword" v-model="keyword" append-icon="mdi-magnify" label="検索" sigle-line @keyup.enter="search")
     v-content
@@ -75,19 +75,20 @@ export default {
   },
   methods: {
     async gender_switch(gender) {
+      this.category = "";
       await this.$store.dispatch("item/search", {
         gender: gender,
         category: "",
         subCategory: ""
       });
       await this.$store.dispatch("item/category");
-      await this.$store.dispatch("item/subCategories");
+      await this.$store.dispatch("item/subCategory");
     },
     async category_switch(category) {
       await this.$store.dispatch("item/search", {
         category: category
       });
-      await this.$store.dispatch("item/subCategories", category);
+      await this.$store.dispatch("item/subCategory");
     },
     async sub_category_switch(subCategory) {
       await this.$store.dispatch("item/search", {
@@ -107,6 +108,8 @@ export default {
       drawer: false,
       fixed: false,
       keyword: "",
+      gender: this.$store.state.item.parameter.gender,
+      category: this.$store.state.item.parameter.category,
       items: [
         {
           icon: 'mdi-chart-bubble',

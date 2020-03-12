@@ -9,6 +9,7 @@ export const state = () => ({
   parameter: {
     gender: "WOMEN",
     category: "",
+    subCategory: "",
     keywords: ""
   },
   genders: [
@@ -47,25 +48,25 @@ export const actions = {
     categories = categories.concat(data.hits.map(hit => hit._source.title));
     commit("SET_CATEGORY", categories);
   },
-  async subCategories({ commit }, payload) {
-    commit("TOGGLE_CATEGORY", payload);
-    const { data } = await axios.get(
-      `https://5qh6aaw9u4.execute-api.ap-northeast-1.amazonaws.com/Prod/classification-info`,
-      {
-        params: {
-          index: "categories",
-          gender: this.state.item.parameter.gender,
-          title: this.state.item.parameter.category
-        }
-      }
-    );
-
+  async subCategory({ commit }) {
     let categories = [];
-    if (data.total > 0) {
-      categories = ["ALL"];
-      categories = categories.concat(
-        data.hits[0]._source.sub_categories.map(category => category.title)
+    if (this.state.item.parameter.category) {
+      const { data } = await axios.get(
+        `https://5qh6aaw9u4.execute-api.ap-northeast-1.amazonaws.com/Prod/classification-info`,
+        {
+          params: {
+            index: "categories",
+            gender: this.state.item.parameter.gender,
+            title: this.state.item.parameter.category
+          }
+        }
       );
+      if (data.total > 0) {
+        categories = ["ALL"];
+        categories = categories.concat(
+          data.hits[0]._source.sub_categories.map(category => category.title)
+        );
+      }
     }
     commit("SET_SUBCATEGORY", categories);
   },
@@ -156,11 +157,19 @@ export const mutations = {
       if (data.gender != undefined) {
         state.parameter.gender = data.gender;
       }
-      if (data.category != undefined && data.category != "ALL") {
-        state.parameter.category = data.category;
+      if (data.category != undefined) {
+        state.parameter.category = "";
+        if (data.category != "ALL") {
+          state.parameter.category = data.category;
+        }
       }
-      if (data.subCategory != undefined && data.subCategory != "ALL") {
-        state.parameter.keywords = data.subCategory;
+      if (data.subCategory != undefined) {
+        state.parameter.subCategory = "";
+        state.parameter.keywords = "";
+        if (data.subCategory != "ALL") {
+          state.parameter.subCategory = data.subCategory;
+          state.parameter.keywords = data.subCategory;
+        }
       }
       if (data.keyword != undefined && data.keyword) {
         state.parameter.keywords = data.keyword;
@@ -191,14 +200,5 @@ export const mutations = {
     if (state.tabs.keyword) {
       state.appBarHeight += 70;
     }
-  },
-  TOGGLE_GENDER(state, gender) {
-    state.parameter.gender = gender;
-  },
-  TOGGLE_CATEGORY(state, category) {
-    state.parameter.category = category;
-  },
-  TOGGLE_SUBCATEGORY(state, subCategory) {
-    state.parameter.subCategory = subCategory;
   }
 };
