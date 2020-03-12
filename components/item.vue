@@ -22,7 +22,7 @@
             | {{ content }}
             div(id="unisize_tag" :data-cid="item.clientId" data-cuid="" :data-itm="item.itemId")
             script(type="text/javascript" src="https://bnr.cl.unisize.makip.co.jp/tag/unisize.js")
-  v-col(v-else)
+  v-col(v-else cols=4)
       v-card(:href="`/items/item/${item.itemId}`")
           v-img.align-end(:src="item.imageUrl.pc" :srcset="`${item.imageUrl.sp} 414w, ${item.imageUrl.retina} 1080w,${item.imageUrl.pc} 1920w`" :alt="`${item.brand} ${item.title}`")
             v-card-title
