@@ -24,8 +24,9 @@
             script(type="text/javascript" src="https://bnr.cl.unisize.makip.co.jp/tag/unisize.js")
   v-col(v-else)
       v-card(:href="`/items/item/${item.itemId}`")
-          v-img(:src="item.imageUrl.pc" :srcset="`${item.imageUrl.sp} 414w, ${item.imageUrl.retina} 1080w,${item.imageUrl.pc} 1920w`" :alt="`${item.brand} ${item.title}`")
-            v-card-title(v-text="item.brand")
+          v-img.align-end(:src="item.imageUrl.pc" :srcset="`${item.imageUrl.sp} 414w, ${item.imageUrl.retina} 1080w,${item.imageUrl.pc} 1920w`" :alt="`${item.brand} ${item.title}`")
+            v-card-title
+              v-chip.white--text(v-text="item.brand")
 </template>
 
 <script>
