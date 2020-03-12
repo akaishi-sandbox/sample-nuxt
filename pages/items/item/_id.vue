@@ -1,22 +1,16 @@
-<template>
-  <v-layout>
-    <v-flex class="text-center">
-    <item :item="item" :isDetail="true" />
-    <!-- おすすめコンテンツ -->
-    <recommend :item="item" />
-    <!-- パンくず -->
-    <breadcrumb :item="item" />
-    <!-- ロゴ部分 -->
-    <div class="home_img">
-        <div class="home_img_ct flex">
-            <div>
-                <h2>unisize</h2>
-                <p>自分好みの快適な服探し</p>
-            </div>
-        </div>
-    </div>
-    </v-flex>
-  </v-layout>
+<template lang="pug">
+  v-layout
+    v-flex
+      item(:item="item" :isDetail="true")
+      <!-- おすすめコンテンツ -->
+      recommend(:item="item")
+      <!-- パンくず -->
+      breadcrumb(:item="item")
+      <!-- ロゴ部分 -->
+      .home_img
+        .home_img_ct.flex
+          h2 unisize
+          p 自分好みの快適な服探し
 </template>
 <script>
 import axios from 'axios';

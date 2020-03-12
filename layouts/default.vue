@@ -8,7 +8,7 @@
               | {{ item.icon }}
           v-list-item-content
             v-list-item-title(v-text="item.title")
-    v-app-bar(:clipped-left="clipped" fixed app)
+    v-app-bar(:clipped-left="clipped" fixed app extension-height="auto")
       v-app-bar-nav-icon(@click.stop="drawer = !drawer")
       v-spacer
       v-toolbar-title
@@ -18,27 +18,29 @@
       v-btn(icon href="/items/search")
         v-icon
           | mdi-magnify
+      template(v-slot:extension)
+        v-card(flat width="100%")
+          v-tabs(v-if="genders.length > 0" grow)
+            v-tab(v-for="gender in genders" v-bind:key="gender.id" :data-gender="gender.key" v-on:click="gender_switch(gender.key)")
+              | {{ gender.name }}
+          v-tabs(v-if="categories.length > 0" show-arrows)
+            v-tab(v-for="category in categories" v-bind:key="category.id" v-on:click="category_switch(category)")
+              | {{ category }}
+          v-btn-toggle(v-if="subCategories.length > 0" tile color="deep-red accent-3" group)
+            v-btn(v-for="subCategory in subCategories" v-bind:key="subCategory.id" :value="subCategory" v-on:click="sub_category_switch(subCategory)")
+              | {{ subCategory }}
+          v-text-field.mt-4(v-model="keyword" append-icon="mdi-magnify" label="検索" sigle-line @keyup.enter="search")
     v-content
-      v-container
+      v-container(fluid)
         nuxt
-    v-footer(:fixed="fixed" app)
-        p.logo
-          | unisize
-          i
-            |β版
-        ul.footer_nav
-          li
-            a(href="https://makip.co.jp/#contact_us_area" target="_blank")
-              | お問い合わせ
-          li
-            a(href="https://makip.co.jp/#company" target="_blank")
-              | 会社概要
-          li
-            a(href="https://makip.co.jp/unisize-terms.html" target="_blank")
-              | 利用規約
-          li
-            a(href="https://makip.co.jp/privacy-policy.html" target="_blank")
-             | プライバシーポリシー
+    v-footer(:fixed="fixed" app dark padless)
+      v-card.flex
+        v-card-title
+          strong unisize
+          i β版
+          v-spacer
+          a.my-2(v-for="(item, i) in items" :key="i" :to="item.to" :href="item.to" target="_blank")
+            | {{ item.title }}
 </template>
 
 <style lang="stylus" scoped>
@@ -49,17 +51,52 @@
 
 <script>
 export default {
+  computed: {
+    genders() {
+      return this.$store.state.item.genders;
+    },
+    categories() {
+      return this.$store.state.item.categories;
+    },
+    subCategories() {
+      return this.$store.state.item.subCategories;
+    }
+  },
+  methods: {
+    async gender_switch(gender) {
+      await this.$store.dispatch("item/search", {
+        gender: gender,
+        category: "",
+        subCategory: ""
+      });
+      await this.$store.dispatch("item/category");
+      await this.$store.dispatch("item/subCategories");
+    },
+    async category_switch(category) {
+      await this.$store.dispatch("item/search", {
+        category: category
+      });
+      await this.$store.dispatch("item/subCategories", category);
+    },
+    async sub_category_switch(subCategory) {
+      await this.$store.dispatch("item/search", {
+        subCategory: subCategory
+      });
+    },
+    async search(event) {
+      console.log("keyword", this.keyword);
+      await this.$store.dispatch("item/search", {
+        keyword: this.keyword
+      });
+    }
+  },
   data () {
     return {
       clipped: false,
       drawer: false,
       fixed: false,
+      keyword: "",
       items: [
-        {
-          icon: 'mdi-apps',
-          title: 'unisize',
-          to: '/'
-        },
         {
           icon: 'mdi-chart-bubble',
           title: 'お問い合わせ',

@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  v-card
     div
       h2
         | おすすめアイテム

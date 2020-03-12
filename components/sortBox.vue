@@ -1,23 +1,24 @@
 <template lang="pug">
-  div
-    p
-      span
+  v-card
+    v-card.d-flex.mb-6(flat tile)
+      v-card.mr-auto.pa-2(flat tile outlined)
         | {{ total }}件
-      div
-        v-btn(@click="sort")
-          span
-            | 人気順
-        v-btn(@click.stop="rightDrawer = !rightDrawer")
+      v-card.pa-2(flat tile outlined)
+        v-btn(@click="sort" x-small)
+          v-icon(left)
+            | mdi-sort
+          | 人気順
+        v-btn(@click.stop="rightDrawer = !rightDrawer" x-small)
+          v-icon(left)
+            | mdi-segment
           | 絞り込み
-        ul
-          li
-            | 人気順
-          li(data-order="new")
-            | 新しい順
-          li(data-order="min-max")
-            | 価格の安い順
-          li(data-order="max-min")
-            | 価格の高い順
+    v-list
+      v-list-item-group
+        v-list-item(v-for="(sort, i) in sorts" v-bind:key="sort.id")
+          v-list-item-content
+            v-list-item-title(v-text="sort.title")
+          v-list-item-action
+            v-icon mdi-chart-bubble
     v-navigation-drawer(v-model="rightDrawer" :right="right" temporary fixed)
       v-list
         v-list-item(v-for="(item, i) in items" v-bind:key="item.id")
@@ -32,6 +33,24 @@
 export default {
   data() {
     return {
+      sorts: [
+        {
+          title: '人気順',
+          id: 'fav'
+        },
+        {
+          title: '新しい順',
+          id: 'new'
+        },
+        {
+          title: '価格の安い順',
+          id: 'min-max'
+        },
+        {
+          title: '価格の高い順',
+          id: 'max-min'
+        },
+      ],
       items: [
         {
           icon: 'mdi-chart-bubble',
