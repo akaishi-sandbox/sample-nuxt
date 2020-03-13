@@ -13,7 +13,6 @@
           p 自分好みの快適な服探し
 </template>
 <script>
-import axios from 'axios';
 import item from '@/components/item.vue';
 import recommend from '@/components/recommend.vue';
 import breadcrumb from '@/components/breadcrumb.vue';
