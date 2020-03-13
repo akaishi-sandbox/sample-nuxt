@@ -2,13 +2,13 @@
   v-layout
     v-flex
       item(:item="item" :isDetail="true")
-      <!-- おすすめコンテンツ -->
+      //- おすすめコンテンツ
       recommend(:item="item")
-      <!-- パンくず -->
+      //- パンくず
       breadcrumb(:item="item")
-      <!-- ロゴ部分 -->
-      .home_img
-        .home_img_ct.flex
+      //- ロゴ部分
+      div.home_img
+        div.home_img_ct.flex
           h2 unisize
           p 自分好みの快適な服探し
 </template>
