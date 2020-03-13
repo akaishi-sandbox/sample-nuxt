@@ -70,6 +70,20 @@ export const actions = {
     }
     commit("SET_SUBCATEGORY", categories);
   },
+  async recommend({ commit }, payload) {
+    const { data } = await axios.get(
+      `https://5qh6aaw9u4.execute-api.ap-northeast-1.amazonaws.com/Prod/recommend-items`,
+      {
+        params: {
+          item_id: payload.itemId,
+          brand: payload.brand,
+          offset: payload.offset ? payload.offset : 0,
+          limit: 36
+        }
+      }
+    );
+    commit("SET_RESULT", data);
+  },
   async search({ commit }, payload) {
     commit("SET_PARAMETER", payload);
     const { data } = await axios.get(
@@ -78,45 +92,7 @@ export const actions = {
         params: this.state.item.parameter
       }
     );
-    commit("SET_TOTAL", data.total);
-    commit(
-      "SET_RESULT",
-      data.items.map(item => {
-        const lowestPrice = {
-          shop: "",
-          price: 99999999
-        };
-        if (lowestPrice.price > item._source.lowest_price) {
-          lowestPrice.shop = item._source.shop;
-          lowestPrice.price = item._source.lowest_price;
-        }
-        const imageUrls = [];
-        if (item._source.image_urls == undefined) {
-          for (let i = 1; i <= item._source.image_num; i++) {
-            imageUrls.push(
-              `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/main${i}.jpg`
-            );
-          }
-        }
-        return {
-          clientId: "todo",
-          itemId: item._source.item_id,
-          title: item._source.title,
-          brand: item._source.brand,
-          gender: item._source.gender,
-          category: item._source.category,
-          imageUrl: {
-            retina: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/retina/thumbnail.jpg`,
-            pc: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/pc/thumbnail.jpg`,
-            sp: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/sp/thumbnail.jpg`
-          },
-          imageUrls: imageUrls,
-          detailUrls: [item._source.detail_url],
-          contents: [item._source.description],
-          lowestPrice: lowestPrice
-        };
-      })
-    );
+    commit("SET_RESULT", data);
   }
 };
 
@@ -176,11 +152,45 @@ export const mutations = {
       }
     }
   },
-  SET_TOTAL(state, data) {
-    state.total = data;
-  },
   SET_RESULT(state, data) {
-    state.list = data;
+    state.total = data.total;
+    state.list = data.items.map(item => {
+      const lowestPrice = {
+        shop: "",
+        price: 99999999
+      };
+      if (lowestPrice.price > item._source.lowest_price) {
+        lowestPrice.shop = item._source.shop;
+        lowestPrice.price = item._source.lowest_price;
+      }
+      let imageUrls = [];
+      if (item._source.image_urls == undefined) {
+        for (let i = 1; i <= item._source.image_num; i++) {
+          imageUrls.push(
+            `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/main${i}.jpg`
+          );
+        }
+      } else {
+        imageUrls = item._source.image_urls;
+      }
+      return {
+        clientId: "todo",
+        itemId: item._source.item_id,
+        title: item._source.title,
+        brand: item._source.brand,
+        gender: item._source.gender,
+        category: item._source.category,
+        imageUrl: {
+          retina: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/retina/thumbnail.jpg`,
+          pc: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/pc/thumbnail.jpg`,
+          sp: `https://d3sg9dzr200rhf.cloudfront.net/images/${item._source.shop}/${item._source.item_id}/sp/thumbnail.jpg`
+        },
+        imageUrls: imageUrls,
+        detailUrls: [item._source.detail_url],
+        contents: [item._source.description],
+        lowestPrice: lowestPrice
+      };
+    });
   },
   SET_CATEGORY(state, data) {
     state.categories = data;
