@@ -57,6 +57,15 @@
 
 <script>
 export default {
-  props: ["item", "isDetail"]
+  props: {
+    item: {
+      type: Object,
+      default: null
+    },
+    isDetail: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>

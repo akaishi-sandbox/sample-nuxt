@@ -8,19 +8,19 @@
 <script>
 export default {
   computed: {
-    genders() {
-      return this.$store.state.item.genders;
+    genders () {
+      return this.$store.state.item.genders
     }
   },
   methods: {
-    async gender_switch(gender) {
-      await this.$store.dispatch("item/search", {
-        gender: gender,
-        category: "",
-        subCategory: ""
-      });
-      await this.$store.dispatch("item/category");
-      await this.$store.dispatch("item/subCategories");
+    async gender_switch (gender) {
+      await this.$store.dispatch('item/search', {
+        gender,
+        category: '',
+        subCategory: ''
+      })
+      await this.$store.dispatch('item/category')
+      await this.$store.dispatch('item/subCategories')
     }
   }
 }

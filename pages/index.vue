@@ -6,26 +6,26 @@
 </template>
 
 <script>
-import item from '@/components/item.vue';
+import item from '@/components/item.vue'
 
 export default {
   components: {
     item
   },
+  async fetch ({ store }) {
+    await store.dispatch('item/search')
+  },
   computed: {
-    items() {
-      return this.$store.state.item.list;
+    items () {
+      return this.$store.state.item.list
     }
   },
-  async created() {
-    this.$store.dispatch("item/init", {
+  async created () {
+    this.$store.dispatch('item/init', {
       gender: true,
       category: true
-    });
-    await this.$store.dispatch("item/category");
-  },
-  async fetch ({ store, params }) {
-    await store.dispatch("item/search");
+    })
+    await this.$store.dispatch('item/category')
   }
 }
 </script>

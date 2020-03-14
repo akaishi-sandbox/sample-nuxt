@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       sorts: [
         {
@@ -49,7 +49,7 @@ export default {
         {
           title: '価格の高い順',
           id: 'max-min'
-        },
+        }
       ],
       items: [
         {
@@ -78,13 +78,13 @@ export default {
     }
   },
   computed: {
-    total() {
-      return this.$store.state.item.total;
+    total () {
+      return this.$store.state.item.total
     }
   },
   methods: {
-    sort() {
-      console.log("sort");
+    sort () {
+      console.log('sort')
     }
   }
 }

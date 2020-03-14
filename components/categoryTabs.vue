@@ -11,27 +11,27 @@
 <script>
 export default {
   computed: {
-    categories() {
-      return this.$store.state.item.categories;
+    categories () {
+      return this.$store.state.item.categories
     },
-    subCategories() {
-      return this.$store.state.item.subCategories;
+    subCategories () {
+      return this.$store.state.item.subCategories
     }
   },
-  async created() {
-    await this.$store.dispatch("item/category");
+  async created () {
+    await this.$store.dispatch('item/category')
   },
   methods: {
-    async category_switch(category) {
-      await this.$store.dispatch("item/search", {
-        category: category
-      });
-      await this.$store.dispatch("item/subCategories", category);
+    async category_switch (category) {
+      await this.$store.dispatch('item/search', {
+        category
+      })
+      await this.$store.dispatch('item/subCategories', category)
     },
-    async sub_category_switch(subCategory) {
-      await this.$store.dispatch("item/search", {
-        subCategory: subCategory
-      });
+    async sub_category_switch (subCategory) {
+      await this.$store.dispatch('item/search', {
+        subCategory
+      })
     }
   }
 }

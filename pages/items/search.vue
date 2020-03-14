@@ -7,36 +7,35 @@
 </template>
 
 <script>
-import item from '@/components/item.vue';
-import sortBox from '@/components/sortBox.vue';
+import item from '@/components/item.vue'
+import sortBox from '@/components/sortBox.vue'
 
 export default {
   components: {
     sortBox,
     item
   },
-  data() {
+  data () {
     return {
-      keyword: ""
-    };
-  },
-  created() {
-    this.$store.dispatch("item/init", {
-      gender: true,
-      keyword: true
-    });
-  },
-  computed: {
-    items() {
-      return this.$store.state.item.list;
+      keyword: ''
     }
   },
+  computed: {
+    items () {
+      return this.$store.state.item.list
+    }
+  },
+  created () {
+    this.$store.dispatch('item/init', {
+      gender: true,
+      keyword: true
+    })
+  },
   methods: {
-    async search(event) {
-      console.log("keyword", this.keyword);
-      await this.$store.dispatch("item/search", {
+    async search () {
+      await this.$store.dispatch('item/search', {
         keyword: this.keyword
-      });
+      })
     }
   }
 }

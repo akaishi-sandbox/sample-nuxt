@@ -56,58 +56,12 @@
 
 <script>
 export default {
-  computed: {
-    tabs() {
-      return this.$store.state.item.tabs;
-    },
-    genders() {
-      return this.$store.state.item.genders;
-    },
-    categories() {
-      return this.$store.state.item.categories;
-    },
-    subCategories() {
-      return this.$store.state.item.subCategories;
-    },
-    appBarHeight() {
-      return this.$store.state.item.appBarHeight;
-    }
-  },
-  methods: {
-    async gender_switch(gender) {
-      this.category = "";
-      await this.$store.dispatch("item/search", {
-        gender: gender,
-        category: "",
-        subCategory: ""
-      });
-      await this.$store.dispatch("item/category");
-      await this.$store.dispatch("item/subCategory");
-    },
-    async category_switch(category) {
-      await this.$store.dispatch("item/search", {
-        category: category
-      });
-      await this.$store.dispatch("item/subCategory");
-    },
-    async sub_category_switch(subCategory) {
-      await this.$store.dispatch("item/search", {
-        subCategory: subCategory
-      });
-    },
-    async search(event) {
-      console.log("keyword", this.keyword);
-      await this.$store.dispatch("item/search", {
-        keyword: this.keyword
-      });
-    }
-  },
   data () {
     return {
       clipped: false,
       drawer: false,
       fixed: false,
-      keyword: "",
+      keyword: '',
       gender: this.$store.state.item.parameter.gender,
       category: this.$store.state.item.parameter.category,
       items: [
@@ -134,6 +88,51 @@ export default {
       ],
       miniVariant: false,
       title: 'unisize'
+    }
+  },
+  computed: {
+    tabs () {
+      return this.$store.state.item.tabs
+    },
+    genders () {
+      return this.$store.state.item.genders
+    },
+    categories () {
+      return this.$store.state.item.categories
+    },
+    subCategories () {
+      return this.$store.state.item.subCategories
+    },
+    appBarHeight () {
+      return this.$store.state.item.appBarHeight
+    }
+  },
+  methods: {
+    async gender_switch (gender) {
+      this.category = ''
+      await this.$store.dispatch('item/search', {
+        gender,
+        category: '',
+        subCategory: ''
+      })
+      await this.$store.dispatch('item/category')
+      await this.$store.dispatch('item/subCategory')
+    },
+    async category_switch (category) {
+      await this.$store.dispatch('item/search', {
+        category
+      })
+      await this.$store.dispatch('item/subCategory')
+    },
+    async sub_category_switch (subCategory) {
+      await this.$store.dispatch('item/search', {
+        subCategory
+      })
+    },
+    async search () {
+      await this.$store.dispatch('item/search', {
+        keyword: this.keyword
+      })
     }
   }
 }

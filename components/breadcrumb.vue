@@ -19,6 +19,11 @@
 </template>
 <script>
 export default {
-  props: ["item"]
+  props: {
+    item: {
+      type: Object,
+      default: null
+    }
+  }
 }
 </script>
