@@ -1,7 +1,7 @@
 <template lang="pug">
   v-layout
     v-flex
-      item(:item="item" :isDetail="true")
+      item(:item="item")
       //- おすすめコンテンツ
       recommend(:item="item")
       //- パンくず

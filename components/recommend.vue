@@ -3,21 +3,14 @@
     div
       h2
         | おすすめアイテム
-      v-row(no-gutters)
-        item(v-for="item in items" v-bind:key="item.id" :item="item" :isDetail="false")
+      itemList(:items="items")
 </template>
 <script>
-import item from '@/components/item.vue'
+import itemList from '@/components/itemList.vue'
 
 export default {
   components: {
-    item
-  },
-  props: {
-    item: {
-      type: Object,
-      default: null
-    }
+    itemList
   },
   computed: {
     items () {

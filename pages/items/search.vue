@@ -2,18 +2,17 @@
   v-layout(column justify-center)
     v-flex(xs12 sm8 md6)
       sortBox
-      v-row(no-gutters)
-        item(v-for="item in items" :item="item" v-bind:key="item.id" :isDetail="false")
+      itemList(:items="items")
 </template>
 
 <script>
-import item from '@/components/item.vue'
+import itemList from '@/components/itemList.vue'
 import sortBox from '@/components/sortBox.vue'
 
 export default {
   components: {
-    sortBox,
-    item
+    itemList,
+    sortBox
   },
   data () {
     return {

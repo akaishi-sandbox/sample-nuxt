@@ -1,5 +1,5 @@
 <template lang="pug">
-  v-card(v-if="isDetail")
+  v-card
       //- 画像
       v-img(:src="item.imageUrl" :alt="item.brand")
       //- ブランド名・タイトル
@@ -37,11 +37,6 @@
             | サイズ詳細
           v-expansion-panel-content
             v-data-table(hide-default-footer :headers="item.sizeTable.headers" :items="item.sizeTable.items")
-  v-col(v-else cols=4)
-      v-card(:href="`/items/item/${item.itemId}`")
-          v-img.align-end(:src="item.imageUrl.pc" :srcset="`${item.imageUrl.sp} 414w, ${item.imageUrl.retina} 1080w,${item.imageUrl.pc} 1920w`" :alt="`${item.brand} ${item.title}`")
-            v-card-title
-              v-chip.white--text(v-text="item.brand")
 </template>
 
 <style lang="stylus" scoped>
@@ -61,10 +56,6 @@ export default {
     item: {
       type: Object,
       default: null
-    },
-    isDetail: {
-      type: Boolean,
-      default: false
     }
   }
 }

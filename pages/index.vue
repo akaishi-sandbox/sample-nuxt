@@ -1,16 +1,15 @@
 <template lang="pug">
   v-layout(column justify-center align-center)
     v-flex(xs12 sm8 md6)
-      v-row(no-gutters)
-        item(v-for="item in items" v-bind:key="item.id" :item="item" :isDetail="false")
+      itemList(:items="items")
 </template>
 
 <script>
-import item from '@/components/item.vue'
+import itemList from '@/components/itemList.vue'
 
 export default {
   components: {
-    item
+    itemList
   },
   async fetch ({ store }) {
     await store.dispatch('item/search')

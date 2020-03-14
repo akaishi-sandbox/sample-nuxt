@@ -2,8 +2,5 @@
   v-layout
     v-flex
 </template>
-<script>
-export default {
-
-}
+<script lang="ts">
 </script>
