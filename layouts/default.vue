@@ -55,8 +55,9 @@
 </style>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+import { Vue, Component } from 'nuxt-property-decorator'
+
+@Component({
   data () {
     return {
       clipped: false,
@@ -110,7 +111,7 @@ export default Vue.extend({
   },
   methods: {
     async gender_switch (gender:string) {
-      this.category = ''
+      this.$data.category = ''
       await this.$store.dispatch('item/search', {
         gender,
         category: '',
@@ -132,9 +133,12 @@ export default Vue.extend({
     },
     async search () {
       await this.$store.dispatch('item/search', {
-        keyword: this.keyword
+        keyword: this.$data.keyword
       })
     }
   }
 })
+export default class extends Vue {
+
+}
 </script>
