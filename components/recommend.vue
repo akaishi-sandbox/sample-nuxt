@@ -5,10 +5,11 @@
         | おすすめアイテム
       itemList(:items="items")
 </template>
-<script>
+<script lang="ts">
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
 import itemList from '@/components/itemList.vue'
 
-export default {
+@Component({
   components: {
     itemList
   },
@@ -16,9 +17,13 @@ export default {
     items () {
       return this.$store.state.item.list
     }
-  },
+  }
+})
+export default class extends Vue {
+  @Prop()
+  item!: any
+
   async created () {
-    console.log('recommend:', this.item)
     if (this.item.itemId) {
       await this.$store.dispatch('item/recommend', {
         itemId: this.item.itemId,

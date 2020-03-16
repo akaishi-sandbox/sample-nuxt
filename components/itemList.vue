@@ -7,13 +7,12 @@
                 v-chip.white--text(v-text="item.brand")
 </template>
 
-<script>
-export default {
-  props: {
-    items: {
-      type: Array,
-      default: null
-    }
-  }
+<script lang="ts">
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
+
+@Component
+export default class extends Vue {
+  @Prop()
+  items!: any[]
 }
 </script>

@@ -29,8 +29,9 @@
             v-list-item-title(v-text="item.title")
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { Vue, Component } from 'nuxt-property-decorator'
+@Component({
   data () {
     return {
       sorts: [
@@ -87,5 +88,8 @@ export default {
       console.log('sort')
     }
   }
+})
+export default class extends Vue {
+
 }
 </script>

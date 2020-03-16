@@ -17,13 +17,13 @@
             | {{ item.category }}
             meta(itemprop="position" content="3")
 </template>
-<script>
-export default {
-  props: {
-    item: {
-      type: Object,
-      default: null
-    }
-  }
+
+<script lang="ts">
+import { Vue, Component, Prop } from 'nuxt-property-decorator'
+
+@Component
+export default class extends Vue {
+  @Prop()
+  item!: any
 }
 </script>
