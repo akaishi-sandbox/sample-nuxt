@@ -231,22 +231,24 @@ export const mutations = {
       })
       for (let i = 0; i < data.items[0]._source.SKUs.length; i++) {
         const sku = data.items[0]._source.SKUs[i]
-        if (i === 0) {
-          for (const part of sku.parts) {
-            sizeTable.headers.push({
-              text: part.part,
-              sortable: false,
-              value: part.part
-            })
+        if (sku.parts !== undefined) {
+          if (i === 0) {
+            for (const part of sku.parts) {
+              sizeTable.headers.push({
+                text: part.part,
+                sortable: false,
+                value: part.part
+              })
+            }
           }
+          const sizeInfo = {
+            size: sku.size
+          }
+          for (const part of sku.parts) {
+            sizeInfo[part.part] = part.scale
+          }
+          sizeTable.items.push(sizeInfo)
         }
-        const sizeInfo = {
-          size: sku.size
-        }
-        for (const part of sku.parts) {
-          sizeInfo[part.part] = part.scale
-        }
-        sizeTable.items.push(sizeInfo)
       }
     }
     state.data = {
