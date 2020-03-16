@@ -4,21 +4,26 @@
       itemList(:items="items")
 </template>
 
-<script>
+<script lang="ts">
+import { Vue, Component } from 'nuxt-property-decorator'
+import { Context } from '@nuxt/types'
 import itemList from '@/components/itemList.vue'
 
-export default {
+@Component({
   components: {
     itemList
-  },
-  async fetch ({ store }) {
-    await store.dispatch('item/search')
   },
   computed: {
     items () {
       return this.$store.state.item.list
     }
-  },
+  }
+})
+export default class extends Vue {
+  async fetch ({ store }: Context) {
+    await store.dispatch('item/search')
+  }
+
   async created () {
     this.$store.dispatch('item/init', {
       gender: true,

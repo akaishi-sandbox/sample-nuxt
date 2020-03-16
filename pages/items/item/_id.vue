@@ -12,24 +12,29 @@
           h2 unisize
           p 自分好みの快適な服探し
 </template>
-<script>
+
+<script lang="ts">
+import { Vue, Component } from 'nuxt-property-decorator'
+import { Context } from '@nuxt/types'
 import item from '@/components/item.vue'
 import recommend from '@/components/recommend.vue'
 import breadcrumb from '@/components/breadcrumb.vue'
 
-export default {
+@Component({
   components: {
     item,
     recommend,
     breadcrumb
   },
-  async fetch ({ store, params }) {
-    await store.dispatch('item/get', params.id)
-  },
   computed: {
     item () {
       return this.$store.state.item.data
     }
+  }
+})
+export default class extends Vue {
+  async fetch ({ store, params }: Context) {
+    await store.dispatch('item/get', params.id)
   }
 }
 </script>
