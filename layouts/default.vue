@@ -54,8 +54,9 @@
   text-decoration inherit
 </style>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
   data () {
     return {
       clipped: false,
@@ -108,7 +109,7 @@ export default {
     }
   },
   methods: {
-    async gender_switch (gender) {
+    async gender_switch (gender:string) {
       this.category = ''
       await this.$store.dispatch('item/search', {
         gender,
@@ -118,13 +119,13 @@ export default {
       await this.$store.dispatch('item/category')
       await this.$store.dispatch('item/subCategory')
     },
-    async category_switch (category) {
+    async category_switch (category:string) {
       await this.$store.dispatch('item/search', {
         category
       })
       await this.$store.dispatch('item/subCategory')
     },
-    async sub_category_switch (subCategory) {
+    async sub_category_switch (subCategory:string) {
       await this.$store.dispatch('item/search', {
         subCategory
       })
@@ -135,5 +136,5 @@ export default {
       })
     }
   }
-}
+})
 </script>

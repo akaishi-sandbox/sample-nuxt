@@ -8,14 +8,15 @@
       Home(page)
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue, { PropOptions } from 'vue'
+export default Vue.extend({
   layout: 'empty',
   props: {
     error: {
       type: Object,
       default: null
-    }
+    } as PropOptions<any>
   },
   data () {
     return {
@@ -24,13 +25,13 @@ export default {
     }
   },
   head () {
-    const title =
+    const title:string =
       this.error.statusCode === 404 ? this.pageNotFound : this.otherError
     return {
       title
     }
   }
-}
+})
 </script>
 
 <style scoped>
